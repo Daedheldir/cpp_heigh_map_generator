@@ -11,8 +11,11 @@
 #include "utilities/pnm.hpp"
 #include "utilities/IniHandler.hpp"
 #include "utilities/Configuration.hpp"
+#include "utilities/MathOperations.hpp"
+#include "utilities/CsvHandler.hpp"
 #include <limits>
 #include <cmath>
+#include <chrono>
 
 using HeightMap = std::vector<std::vector<float>>;
 
@@ -167,12 +170,11 @@ HeightMap SumGeneratedHeightMaps(const std::vector< HeightMap>& heightMaps, cons
 }
 
 HeightMap GenerateMap(const dh::Config::Configuration& config) {
-	std::cout << "Generating maps..." << std::endl;
 
 	std::vector<HeightMap> maps;
 	int counter = 1;
 	for (const auto& genSettings : config.generationSettingsArr) {
-		std::cout << "\tGenerating map " << counter++ << "..." << std::endl;
+		//std::cout << "\tGenerating map " << counter++ << "..." << std::endl;
 		GenerationMethodBase* generationBasePointer;
 		switch (genSettings.getMethodType())
 		{
@@ -197,6 +199,23 @@ HeightMap GenerateMap(const dh::Config::Configuration& config) {
 	}
 
 	return SumGeneratedHeightMaps(maps, config.generationSettingsArr);
+}
+std::vector<std::string> CalculateExecutionTimesStatistics(const int iter, const std::vector<double>& executionTimes) {
+	double max = *std::max_element(std::begin(executionTimes), std::end(executionTimes));
+	double min = *std::min_element(std::begin(executionTimes), std::end(executionTimes));
+
+	double mean = dh::Math::CalculateMean(executionTimes);
+	double variance = dh::Math::CalculateVariance(executionTimes);
+	double stdDev = dh::Math::CalculateStandardDeviation(executionTimes);
+
+	std::vector<std::string> row = { std::to_string(iter), 
+		std::to_string(max / 1000000000), 
+		std::to_string(mean / 1000000000),
+		std::to_string(min / 1000000000) ,
+		std::to_string(variance / 1000000000),
+		std::to_string(stdDev / 1000000000) };
+
+	return row;
 }
 
 int main()
@@ -225,11 +244,24 @@ int main()
 	// TODO: Lock program to a single core
 	// TODO: Add a .csv file export with all parameters and test results
 
+	CsvHandler csvHandler;
+	std::vector<std::string> columnNames = { "Iteration", "Max", "Mean", "Min", "Variance", "Std Deviation" };
+	csvHandler.AddRowToCsv(columnNames);
+
+	std::vector<double> executionTimes;
+
 	for (int iter = 0; iter < configuration.iterations; ++iter) {
 		PopulateGenerationSettingsForConfig(confHandler, configuration);
 
 		std::cout << "Iteration " << iter + 1 << std::endl;
+		std::cout << "Generating maps..." << std::endl;
+
+		auto start = std::chrono::high_resolution_clock::now();
 		HeightMap map = GenerateMap(configuration);
+		auto end = std::chrono::high_resolution_clock::now();
+
+		executionTimes.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
+
 		std::cout << "Done!" << std::endl;
 
 		const size_t height = configuration.mapSize;
@@ -257,5 +289,10 @@ int main()
 
 		pnm::write_pgm_binary(imageFileName, img);
 	}
+	std::cout << "\tCalculating statistics..." << std::endl;
+	auto row = CalculateExecutionTimesStatistics(configuration.iterations, executionTimes);
+	csvHandler.AddRowToCsv(row);
+	csvHandler.WriteCsv("statistics.csv");
+
 	return 0;
 }
