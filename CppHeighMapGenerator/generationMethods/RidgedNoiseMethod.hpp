@@ -1,11 +1,11 @@
 #pragma once
 #include "GenerationMethodBase.h"
 
-class PerlinNoiseMethod : public GenerationMethodBase
+class RidgedNoiseMethod : public GenerationMethodBase
 {
 public:
-	PerlinNoiseMethod(GenerationSettings settings, int seed, float scaleOverride);
-	virtual ~PerlinNoiseMethod();
+	RidgedNoiseMethod(GenerationSettings settings, int seed, float scaleOverride);
+	virtual ~RidgedNoiseMethod();
 
 private:
 	// Inherited via GenerationMethodBase

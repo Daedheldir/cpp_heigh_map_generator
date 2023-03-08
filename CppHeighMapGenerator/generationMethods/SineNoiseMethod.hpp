@@ -1,13 +1,12 @@
 #pragma once
 #include "GenerationMethodBase.h"
 
-class PerlinNoiseMethod : public GenerationMethodBase
+class SineNoiseMethod : public GenerationMethodBase
 {
 public:
-	PerlinNoiseMethod(GenerationSettings settings, int seed, float scaleOverride);
-	virtual ~PerlinNoiseMethod();
+	SineNoiseMethod(GenerationSettings generationSettings, int seed, float scaleOverride);
+	virtual ~SineNoiseMethod();
 
-private:
 	// Inherited via GenerationMethodBase
 	virtual float EvaluateHeight(const std::pair<float, float>& point) override;
 

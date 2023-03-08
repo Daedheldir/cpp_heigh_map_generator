@@ -4,10 +4,11 @@
 cmake_minimum_required (VERSION 3.8)
 
 # Add source to this project's executable.
-add_executable (CppHeighMapGenerator "CppHeighMapGenerator.cpp" "CppHeighMapGenerator.h" "GenerationMethods/GenerationMethodBase.h" "GenerationMethods/GenerationSettings.h" "GenerationMethods/GenerationMethodBase.cpp" "GenerationMethods/PerlinNoiseMethod.h" "GenerationMethods/PerlinNoiseMethod.cpp" "GenerationMethods/GenerationSettings.cpp")
+add_executable (CppHeighMapGenerator "CppHeighMapGenerator.cpp" "CppHeighMapGenerator.h" "GenerationMethods/GenerationMethodBase.h" "GenerationMethods/GenerationSettings.h" "GenerationMethods/GenerationMethodBase.cpp" "GenerationMethods/PerlinNoiseMethod.h" "GenerationMethods/PerlinNoiseMethod.cpp" "GenerationMethods/GenerationSettings.cpp" "generationMethods/SineNoiseMethod.hpp" "generationMethods/SineNoiseMethod.cpp" "utilities/BMPHandler.h" "utilities/pnm.hpp"  "utilities/IniHandler.cpp" "generationMethods/BillowNoiseMethod.cpp" "generationMethods/RidgedNoiseMethod.cpp" "generationMethods/CosineNoiseMethod.cpp")
+include_directories(${PROJECT_SOURCE_DIR})
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET CppHeighMapGenerator PROPERTY CXX_STANDARD 20)
+  set_property(TARGET CppHeighMapGenerator PROPERTY CXX_STANDARD 17)
 endif()
 
 # TODO: Add tests and install targets if needed.

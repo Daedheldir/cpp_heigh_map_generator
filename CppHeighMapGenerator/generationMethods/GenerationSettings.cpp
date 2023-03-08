@@ -1,5 +1,9 @@
 #include "GenerationSettings.h"
 
+GenerationSettings::GenerationSettings()
+{
+}
+
 GenerationSettings::GenerationSettings(GenerationMethodType methodType, int octaves, float scale, float weight, float persistance, float smoothing, int chunkSize)
 {
 	setGenerationMethodType(methodType);

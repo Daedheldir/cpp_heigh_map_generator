@@ -1,48 +1,53 @@
+#pragma once
 class GenerationSettings
 {
 public:
 	enum class GenerationMethodType
 	{
-		PerlinNoise
+		PerlinNoise,
+		Sine,
+		Cosine,
+		Ridged,
+		Billow
 	};
-
+	GenerationSettings();
 	GenerationSettings(GenerationMethodType methodType, int octaves, float scale, float weight, float persistance, float smoothing, int chunkSize);
 	~GenerationSettings();
 
-	bool isActive() { return active; }
+	bool isActive() const { return active; }
 	void isActive(bool isActive) { this->active = isActive; }
 
-	bool isFirstOctaveAsMask() { return useFirstOctaveAsMask; };
+	bool isFirstOctaveAsMask() const { return useFirstOctaveAsMask; };
 	void isFirstOctaveAsMask(bool useFirstOctaveAsMask) { this->useFirstOctaveAsMask = useFirstOctaveAsMask; };
 
-	bool isFirstHeightMapAsMask() { return useFirstHeightMapsAsMask; };
+	bool isFirstHeightMapAsMask() const { return useFirstHeightMapsAsMask; };
 	void isFirstHeightMapAsMask(bool useFirstHeightMapsAsMask) { this->useFirstHeightMapsAsMask = useFirstHeightMapsAsMask; };
 
-	bool isInvertFirstHeightMapMask() { return invertFirstHeightMapMask; };
+	bool isInvertFirstHeightMapMask() const { return invertFirstHeightMapMask; };
 	void isInvertFirstHeightMapMask(bool invertFirstHeightMapMask) { this->invertFirstHeightMapMask = invertFirstHeightMapMask; };
 
-	bool isSubtractFromMap() { return subtractFromMap; };
+	bool isSubtractFromMap() const { return subtractFromMap; };
 	void isSubtractFromMap(bool subtractFromMap) { this->subtractFromMap = subtractFromMap; };
 
-	GenerationMethodType getMethodType() { return methodType; };
+	GenerationMethodType getMethodType() const { return methodType; };
 	void setGenerationMethodType(GenerationMethodType methodType) { this->methodType = methodType; };
 
-	int		getOctaves() { return octaves; };
+	int		getOctaves() const { return octaves; };
 	void	setOctaves(int octaves) { this->octaves = octaves; };
 
-	float	getScale() { return scale; };
+	float	getScale() const { return scale; };
 	void	setScale(float scale) { this->scale = scale; };
 
-	float	getWeight() { return weight; };
+	float	getWeight() const { return weight; };
 	void	setWeight(float weight) { this->weight = weight; };
 
-	float	getPersistance() { return persistance; };
+	float	getPersistance() const { return persistance; };
 	void	setPersistance(float persistance) { this->persistance = persistance; };
 
-	float	getSmoothing() { return smoothing; };
+	float	getSmoothing() const { return smoothing; };
 	void	setSmoothing(float smoothing) { this->smoothing = smoothing; };
 
-	int		getChunkSize() { return chunkSize; };
+	int		getChunkSize() const { return chunkSize; };
 	void	setChunkSize(int chunkSize) { this->chunkSize = chunkSize; };
 
 private:
