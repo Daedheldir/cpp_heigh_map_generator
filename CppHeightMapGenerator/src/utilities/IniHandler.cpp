@@ -1,10 +1,10 @@
-#include "IniHandler.hpp"
+#include "utilities/IniHandler.hpp"
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "Configuration.hpp"
-#include "StringOperations.hpp"
+#include "utilities/Configuration.hpp"
+#include "utilities/StringOperations.hpp"
 
 IniHandler::IniHandler(std::filesystem::path iniFilepath)
 {

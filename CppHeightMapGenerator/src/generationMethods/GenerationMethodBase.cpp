@@ -1,4 +1,4 @@
-#include "GenerationMethodBase.h"
+#include "generationMethods/GenerationMethodBase.hpp"
 
 GenerationMethodBase::GenerationMethodBase(GenerationSettings settings, int seed, float scaleOverride) :
 	settings{ settings },

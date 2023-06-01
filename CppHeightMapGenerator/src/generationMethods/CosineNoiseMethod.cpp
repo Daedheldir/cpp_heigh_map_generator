@@ -1,4 +1,4 @@
-#include "CosineNoiseMethod.hpp"
+#include "generationMethods/CosineNoiseMethod.hpp"
 
 CosineNoiseMethod::CosineNoiseMethod(GenerationSettings generationSettings, int seed, float scaleOverride) :
 	GenerationMethodBase{ generationSettings, seed, scaleOverride }

@@ -1,4 +1,4 @@
-#include "SineNoiseMethod.hpp"
+#include "generationMethods/SineNoiseMethod.hpp"
 
 SineNoiseMethod::SineNoiseMethod(GenerationSettings generationSettings, int seed, float scaleOverride) :
 	GenerationMethodBase{ generationSettings, seed, scaleOverride }

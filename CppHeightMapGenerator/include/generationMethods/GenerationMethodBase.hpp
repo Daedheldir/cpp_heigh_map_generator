@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "GenerationSettings.h"
+#include "GenerationSettings.hpp"
 #include "../utilities/PerlinNoise.hpp"
 
 class GenerationMethodBase

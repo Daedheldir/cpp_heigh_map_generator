@@ -1,5 +1,5 @@
 #pragma once
-#include "../generationMethods/GenerationSettings.h"
+#include "generationMethods/GenerationSettings.hpp"
 
 namespace dh::Config {
 	namespace Categories {

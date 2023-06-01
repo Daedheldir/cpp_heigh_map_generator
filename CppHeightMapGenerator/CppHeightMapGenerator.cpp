@@ -1,8 +1,9 @@
 ﻿// CppHeighMapGenerator.cpp : Defines the entry point for the application.
 //
 
-#include "CppHeighMapGenerator.h"
-#include "generationMethods/PerlinNoiseMethod.h"
+#include "CppHeightMapGenerator.h"
+
+#include "generationMethods/PerlinNoiseMethod.hpp"
 #include "generationMethods/SineNoiseMethod.hpp"
 #include "generationMethods/CosineNoiseMethod.hpp"
 #include "generationMethods/RidgedNoiseMethod.hpp"
@@ -13,9 +14,11 @@
 #include "utilities/Configuration.hpp"
 #include "utilities/MathOperations.hpp"
 #include "utilities/CsvHandler.hpp"
+
 #include <limits>
 #include <cmath>
 #include <chrono>
+#include <thread>
 
 using HeightMap = std::vector<std::vector<float>>;
 
@@ -170,7 +173,6 @@ HeightMap SumGeneratedHeightMaps(const std::vector< HeightMap>& heightMaps, cons
 }
 
 HeightMap GenerateMap(const dh::Config::Configuration& config) {
-
 	std::vector<HeightMap> maps;
 	int counter = 1;
 	for (const auto& genSettings : config.generationSettingsArr) {
@@ -208,8 +210,8 @@ std::vector<std::string> CalculateExecutionTimesStatistics(const int iter, const
 	double variance = dh::Math::CalculateVariance(executionTimes);
 	double stdDev = dh::Math::CalculateStandardDeviation(executionTimes);
 
-	std::vector<std::string> row = { std::to_string(iter), 
-		std::to_string(max / 1000000000), 
+	std::vector<std::string> row = { std::to_string(iter),
+		std::to_string(max / 1000000000),
 		std::to_string(mean / 1000000000),
 		std::to_string(min / 1000000000) ,
 		std::to_string(variance / 1000000000),

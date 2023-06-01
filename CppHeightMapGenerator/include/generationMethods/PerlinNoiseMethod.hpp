@@ -1,5 +1,5 @@
 #pragma once
-#include "GenerationMethodBase.h"
+#include "GenerationMethodBase.hpp"
 
 class PerlinNoiseMethod : public GenerationMethodBase
 {

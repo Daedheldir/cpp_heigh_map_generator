@@ -1,4 +1,4 @@
-#include "GenerationSettings.h"
+#include "generationMethods/GenerationSettings.hpp"
 
 GenerationSettings::GenerationSettings()
 {

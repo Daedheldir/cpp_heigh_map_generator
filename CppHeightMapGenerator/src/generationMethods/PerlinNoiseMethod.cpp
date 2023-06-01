@@ -1,4 +1,4 @@
-#include "PerlinNoiseMethod.h"
+#include "generationMethods/PerlinNoiseMethod.hpp"
 
 PerlinNoiseMethod::PerlinNoiseMethod(GenerationSettings settings, int seed, float scaleOverride) :
 	GenerationMethodBase(settings, seed, scaleOverride)

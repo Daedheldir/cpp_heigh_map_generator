@@ -1,4 +1,4 @@
-#include "BillowNoiseMethod.hpp"
+#include "generationMethods/BillowNoiseMethod.hpp"
 
 BillowNoiseMethod::BillowNoiseMethod(GenerationSettings settings, int seed, float scaleOverride) :
 	GenerationMethodBase(settings, seed, scaleOverride)

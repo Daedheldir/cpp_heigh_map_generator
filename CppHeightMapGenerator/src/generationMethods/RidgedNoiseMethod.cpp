@@ -1,4 +1,4 @@
-#include "RidgedNoiseMethod.hpp"
+#include "generationMethods/RidgedNoiseMethod.hpp"
 
 RidgedNoiseMethod::RidgedNoiseMethod(GenerationSettings settings, int seed, float scaleOverride) :
 	GenerationMethodBase(settings, seed, scaleOverride)
