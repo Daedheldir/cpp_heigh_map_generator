@@ -9,5 +9,4 @@ project ("AIHeighMapGenerator")
 
 # Include sub-projects.
 add_subdirectory ("CppHeightMapGenerator")
-add_subdirectory ("GANHeightMapGenerator")
 

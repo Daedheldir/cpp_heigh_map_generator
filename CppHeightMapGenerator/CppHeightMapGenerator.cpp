@@ -14,11 +14,14 @@
 #include "utilities/Configuration.hpp"
 #include "utilities/MathOperations.hpp"
 #include "utilities/CsvHandler.hpp"
+#include "utilities/MemoryProfiling.hpp"
 
 #include <limits>
 #include <cmath>
 #include <chrono>
 #include <thread>
+
+
 
 using HeightMap = std::vector<std::vector<float>>;
 
@@ -131,6 +134,7 @@ HeightMap NormalizeMap(const HeightMap& inputMap, const float minValue, const fl
 	}
 	return map;
 }
+
 HeightMap SumGeneratedHeightMaps(const std::vector< HeightMap>& heightMaps, const std::vector<GenerationSettings>& generationSettings) {
 	std::cout << "Merging generated maps..." << std::endl;
 	HeightMap map;
@@ -139,8 +143,8 @@ HeightMap SumGeneratedHeightMaps(const std::vector< HeightMap>& heightMaps, cons
 
 	const HeightMap& globalFirstOctaveMask = heightMaps[0];
 
-	float minValue = std::numeric_limits<float>::max();
-	float maxValue = std::numeric_limits<float>::min();
+	float minValue = 10000.0f;
+	float maxValue = -10000.0f;
 
 	for (int i = 0; i < heightMaps.size(); ++i) {
 		std::cout << "\tMerging map " << (i + 1) << "..." << std::endl;
@@ -210,16 +214,23 @@ std::vector<std::string> CalculateExecutionTimesStatistics(const int iter, const
 	double variance = dh::Math::CalculateVariance(executionTimes);
 	double stdDev = dh::Math::CalculateStandardDeviation(executionTimes);
 
+	std::cout << "Max: " << max / 1000000 << " ms, Min: " << min / 1000000 << " ms, Mean: " << mean / 1000000 << " ms, variance: " << variance / std::pow(1000000, 2) << " ms^2, stddev: " << stdDev / 1000000 << "ms" << std::endl;
+
+	auto roundPlaces = [](double number, int places) {
+		const double multiplier = std::pow(10.0, places);
+		return std::round(number * multiplier) / multiplier;
+	};
+	constexpr int decimalPlaces = 5;
 	std::vector<std::string> row = { std::to_string(iter),
-		std::to_string(max / 1000000000),
-		std::to_string(mean / 1000000000),
-		std::to_string(min / 1000000000) ,
-		std::to_string(variance / 1000000000),
-		std::to_string(stdDev / 1000000000) };
+		std::to_string(roundPlaces(max / 1000000, decimalPlaces)),
+		std::to_string(roundPlaces(mean / 1000000, decimalPlaces)),
+		std::to_string(roundPlaces(min / 1000000, decimalPlaces)) ,
+		std::to_string(roundPlaces(variance / std::pow(1000000, 2), decimalPlaces)),
+		std::to_string(roundPlaces(stdDev / 1000000, decimalPlaces)) };
 
 	return row;
 }
-
+//the magic number 7+-2 - millers effect
 int main()
 {
 	std::cout << "Opening configuration file." << std::endl;
@@ -252,15 +263,29 @@ int main()
 
 	std::vector<double> executionTimes;
 
+
+	std::cout << "Starting maps generation..." << std::endl;
+
 	for (int iter = 0; iter < configuration.iterations; ++iter) {
 		PopulateGenerationSettingsForConfig(confHandler, configuration);
 
 		std::cout << "Iteration " << iter + 1 << std::endl;
 		std::cout << "Generating maps..." << std::endl;
 
+		auto pmc = MemoryProfiler::GetMemoryUsage();
+		long privUsage = pmc.PagefileUsage / 1024;
+		long workingSet = pmc.WorkingSetSize / 1024;
+		std::cout << "Pagefile:" << privUsage << "kB" << std::endl;
+		std::cout << "Working set: " << workingSet << "kB" << std::endl;
+
 		auto start = std::chrono::high_resolution_clock::now();
 		HeightMap map = GenerateMap(configuration);
 		auto end = std::chrono::high_resolution_clock::now();
+
+		pmc = MemoryProfiler::GetMemoryUsage();
+	
+		std::cout << "Pagefile:" << pmc.PagefileUsage / 1024 << "kB" << "(+" << (pmc.PagefileUsage / 1024) - privUsage << "kB)" << std::endl;
+		std::cout << "Working set: " << pmc.WorkingSetSize / 1024 << "kB" << "(+" << (pmc.WorkingSetSize / 1024) - workingSet << "kB)" << std::endl;
 
 		executionTimes.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count());
 

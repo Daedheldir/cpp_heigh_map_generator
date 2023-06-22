@@ -15,7 +15,7 @@ set(SOURCE_FILES "CppHeightMapGenerator.cpp"
 	"src/generationMethods/SineNoiseMethod.cpp" 
 	"src/utilities/CsvHandler.cpp" 
 	"src/utilities/IniHandler.cpp" 
-)
+ )
 set(HEADER_DIRS "./" "include/.")
 
 # Add source to this project's executable.

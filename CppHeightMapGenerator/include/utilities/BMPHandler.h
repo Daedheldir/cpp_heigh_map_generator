@@ -23,7 +23,8 @@ public:
 
 		int stride = (widthInBytes)+paddingSize;
 
-		FILE* imageFile = fopen(imageFileName, "wb");
+		FILE* imageFile;
+		fopen_s(&imageFile, imageFileName, "wb");
 
 		unsigned char* fileHeader = createBitmapFileHeader(height, stride);
 		fwrite(fileHeader, 1, FILE_HEADER_SIZE, imageFile);
@@ -39,6 +40,7 @@ public:
 
 		fclose(imageFile);
 	}
+private:
 	unsigned char* createBitmapFileHeader(int height, int stride)
 	{
 		int fileSize = FILE_HEADER_SIZE + INFO_HEADER_SIZE + (stride * height);
@@ -90,5 +92,4 @@ public:
 
 		return infoHeader;
 	}
-private:
 };
